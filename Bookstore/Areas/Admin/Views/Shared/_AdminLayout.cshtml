@@ -1,0 +1,44 @@
+﻿@{
+    // nested layout view
+    Layout = "_Layout";
+
+    // use current controller to determine if tab is active
+    var current = ViewContext.RouteData.Values["controller"]!.ToString() ?? "";
+}
+
+@* since many admin views deal with user entry and data validation,
+   jQuery validation libraries are included here rather than in individual views. *@
+@section scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
+<ul class="nav nav-tabs mt-2 mb-3">
+    <li class="nav-item">
+        <a asp-action="Index" asp-controller="Book"
+           class="nav-link @Nav.Active("Book", current)">
+            Manage Books
+        </a>
+    </li>
+    <li class="nav-item">
+        <a asp-action="Index" asp-controller="Author"
+           class="nav-link @Nav.Active("Author", current)">
+            Manage Authors
+        </a>
+    </li>
+    <li class="nav-item">
+        <a asp-action="Index" asp-controller="Genre"
+           class="nav-link @Nav.Active("Genre", current)">
+            Manage Genres
+        </a>
+    </li>
+    <li class="nav-item">
+        <a asp-action="Index" asp-controller="User"
+           class="nav-link @Nav.Active("User", current)">
+            Manage Users
+        </a>
+    </li>
+</ul>
+
+@RenderBody()
+

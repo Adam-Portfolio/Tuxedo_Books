@@ -1,0 +1,77 @@
+﻿@model CartViewModel
+
+@{
+    ViewData["Title"] = " | Cart";
+}
+
+<h1>Your Cart</h1>
+
+<form asp-action="Clear" method="post">
+    <ul class="list-group mb-4">
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col">
+                    Subtotal: @Model.Subtotal.ToString("c")
+                </div>
+                <div class="col">
+                    <div class="float-end">
+                        <a asp-action="Checkout" class="btn btn-primary">Checkout</a>
+                        <button type="submit" class="btn btn-primary">Clear Cart</button>
+                        <a asp-action="List" asp-controller="Book">Back to Shopping</a>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</form>
+<form asp-action="Remove" method="post">
+    <table class="table">
+        <thead class="bg-dark text-white">
+            <tr>
+                <th>Title</th>
+                <th>Author(s)</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (CartItem item in Model.List)  {
+                <tr>
+                    <td>
+                        <a asp-action="Details" asp-controller="Book"
+                           asp-route-id="@item.Book.BookId"
+                           asp-route-slug="@item.Book.Title.Slug()">
+                            @item.Book.Title
+                        </a>
+                    </td>
+                    <td>
+                        @foreach (var pair in item.Book.Authors) {
+                            <p>
+                                <a asp-action="Details" asp-controller="Author"
+                                   asp-route-id="@pair.Key"
+                                   asp-route-slug="@pair.Value.Slug()">
+                                    @pair.Value
+                                </a>
+                            </p>
+                        }
+                    </td>
+                    <td>@item.Book.Price.ToString("c")</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Subtotal.ToString("c")</td>
+                    <td>
+                        <div class="float-end">
+                            <a asp-action="Edit" asp-controller="Cart"
+                               asp-route-id="@item.Book.BookId"
+                               asp-route-slug="@item.Book.Title.Slug()"
+                               class="btn btn-primary">Edit</a>
+                            <button type="submit" name="id" value="@item.Book.BookId"
+                                    class="btn btn-primary">Remove</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>

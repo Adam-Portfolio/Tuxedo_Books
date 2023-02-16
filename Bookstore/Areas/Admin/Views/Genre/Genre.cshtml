@@ -1,0 +1,61 @@
+﻿@model Genre
+
+@{
+    // this view is used for add, edit, and delete.
+    var action = ViewContext.RouteData.Values["action"]!.ToString()!.Capitalize();
+
+    ViewData["Title"] = $" | {action} Genre";
+}
+
+<h1>@action Genre</h1>
+
+
+<form asp-action="@action" asp-area="Admin" method="post">
+
+    @* if deleting, display name only and name in hidden field for 
+       delete message. Otherwise, provide text boxes. *@
+    @if (action.EqualsNoCase("delete"))
+    {
+        <h5>@Model.Name</h5>
+        <input type="hidden" asp-for="GenreId" />
+        <input type="hidden" asp-for="Name" />
+    }
+    else
+    {
+        <div class="row mb-2">
+            <label asp-for="GenreId" class="col-form-label col-md-2">GenreId:</label>
+
+            @* if adding, provide a text box. Otherwise, display genreId in a label. *@
+            @if (action.EqualsNoCase("add")) {
+                <div class="col-md-4">
+                    <input asp-for="GenreId" class="form-control" />
+                </div>
+                <div class="col">
+                    <span asp-validation-for="GenreId" class="text-danger"></span>
+                </div>
+            }
+            else {
+                <label class="col-form-label col">@Model.GenreId</label>
+                <input type="hidden" asp-for="GenreId" />
+            }
+        </div>
+        <div class="row mb-2">
+            <label asp-for="Name" class="col-form-label col-md-2">Name:</label>
+            <div class="col-md-4">
+                <input asp-for="Name" class="form-control" />
+            </div>
+            <div class="col">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+    }
+
+    @* when deleting, add whitespace above buttons. Otherwise, offset buttons
+    to line up with text boxes *@
+    <div class="row">
+        <div class="@(action.EqualsNoCase("delete") ? "mt-2" : "offset-md-2")">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-action="Index" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+</form>

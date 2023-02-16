@@ -1,0 +1,58 @@
+﻿@model Author
+
+@{
+    // this view is used for add, edit, and delete.
+    var action = ViewContext.RouteData.Values["action"]!.ToString()!.Capitalize();
+
+    ViewData["Title"] = $" | {action} Author";
+}
+
+<h1>@action Author</h1>
+
+<form asp-action="@action" asp-area="Admin" method="post">
+    @* Author ID needed by both delete and edit *@
+    <input type="hidden" asp-for="AuthorId" />
+
+    @* Operation field needed by remote validation *@
+    <input type="hidden" name="Operation" value="@action" />
+
+    @* if deleting, just display full name, but include first and last
+        name in hidden fields so can be used to display delete message.
+        Otherwise, provide text boxes for first and last name. *@
+    @if (action.EqualsNoCase("delete"))
+    {
+        <h5>@Model.FullName</h5>
+        <input type="hidden" asp-for="FirstName" />
+        <input type="hidden" asp-for="LastName" />
+    }
+    else
+    {
+        <div class="row mb-2">
+            <label class="col-form-label col-md-2">First Name:</label>
+            <div class="col-md-4">
+                <input type="text" asp-for="@Model.FirstName" class="form-control" />
+            </div>
+            <div class="col">
+                <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <label class="col-form-label col-md-2">Last Name:</label>
+            <div class="col-md-4">
+                <input type="text" asp-for="@Model.LastName" class="form-control" />
+            </div>
+            <div class="col">
+                <span asp-validation-for="@Model.LastName" class="text-danger"></span>
+            </div>
+        </div>
+    }
+
+    @* when deleting, add whitespace above buttons. Otherwise, offset buttons
+       to line up with text boxes *@
+    <div class="row">
+        <div class="@(action.EqualsNoCase("delete") ? "mt-2" : "offset-md-2")">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-action="Index" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,45 @@
+﻿@model RegisterViewModel
+@{
+    ViewBag.Title = "Add User";
+}
+
+<h2>Add User</h2>
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<form method="post" asp-action="Add">
+    <div class="row mb-2">
+        <label class="col-form-label col-md-2">Username:</label>
+        <div class="col-md-4">
+            <input type="text" asp-for="Username"
+                   class="form-control" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="Username"
+                  class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <label class="col-form-label col-md-2">Password:</label>
+        <div class="col-md-4">
+            <input type="password" asp-for="Password"
+                   class="form-control" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="Password"
+                  class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <label class="col-form-label col-md-2">Confirm Password:</label>
+        <div class="col-md-4">
+            <input type="password" asp-for="ConfirmPassword"
+                   class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col offset-2">
+            <button type="submit" class="btn btn-primary">Add</button>
+            <a asp-action="Index" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+</form>

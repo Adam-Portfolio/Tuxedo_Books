@@ -1,0 +1,31 @@
+﻿@model Author
+
+@{
+    ViewData["Title"] = " | Author";
+}
+
+<h1>Author</h1>
+
+<table class="table table-bordered table-sm">
+    <thead class="bg-dark text-white">
+        <tr>
+            <th>@Model.FullName</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @foreach (var b in Model.Books)
+                {
+                    <p>
+                        <a asp-action="Details" asp-controller="Book"
+                           asp-route-id="@b.BookId"
+                           asp-route-slug="@b.Title.Slug()">
+                            @b.Title
+                        </a>
+                    </p>
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>

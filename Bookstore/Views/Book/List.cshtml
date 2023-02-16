@@ -1,0 +1,91 @@
+﻿@model BookListViewModel
+
+@{
+    ViewData["Title"] = " | Book Catalog";
+ 
+    BookGridData current = Model.CurrentRoute;
+    GridData routes = Model.CurrentRoute.Clone();
+}
+
+<h1>Book Catalog</h1>
+
+@* add to cart form *@
+<form asp-action="Add" asp-controller="Cart" method="post">
+    <table class="table table-bordered table-striped table-sm">
+        <thead class="bg-dark text-white">
+            <tr>
+                <th>
+                    @{ routes.SetSortAndDirection(
+                        nameof(Book.Title), current); }
+                    <a asp-action="List" 
+                       asp-all-route-data="@routes.ToDictionary()"
+                       class="text-white">Title</a>
+                </th>
+                <th>Author(s)</th>
+                <th>
+                    @{ routes.SetSortAndDirection(
+                        nameof(Genre), current); }
+                    <a asp-action="List" 
+                       asp-all-route-data="@routes.ToDictionary()"
+                       class="text-white">Genre</a>
+                </th>
+                <th>
+                    @{ routes.SetSortAndDirection(
+                        nameof(Book.Price), current); }
+                    <a asp-action="List" 
+                       asp-all-route-data="@routes.ToDictionary()"
+                       class="text-white text-decoration-none">Price</a>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Book book in Model.Books)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@book.BookId"
+                           asp-route-slug="@book.Title.Slug()">
+                            @book.Title
+                        </a>
+                    </td>
+                    <td>
+                        @foreach (var a in book.Authors)
+                        {
+                            <p>
+                                <a asp-action="Details" asp-controller="Author"
+                                   asp-route-id="@a.AuthorId"
+                                   asp-route-slug="@a.FullName.Slug()">
+                                    @a.FullName
+                                </a>
+                            </p>
+                        }
+                    </td>
+                    <td>@book.Genre.Name</td>
+                    <td>@book.Price.ToString("c")</td>
+                    <td>
+                        <button type="submit" name="id" value="@book.BookId"
+                                class="btn btn-primary">
+                            Add To Cart
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
+
+@* paging links *@
+@{
+    @* Reset to the current route values. This is necessary to clear the changes made while 
+        creating the sorting links above. *@
+    routes = current.Clone();
+
+    for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        routes.PageNumber = i;
+        string active = @Nav.Active(i, current.PageNumber);
+        <a asp-action="List" asp-all-route-data="@routes.ToDictionary()"
+           class="btn btn-outline-primary @active">@i</a>
+    }
+}

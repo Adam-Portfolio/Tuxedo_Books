@@ -1,0 +1,75 @@
+﻿@model AuthorListViewModel
+@{
+    ViewData["Title"] = " | Author Catalog";
+
+    AuthorGridData current = Model.CurrentRoute;
+    GridData routes = Model.CurrentRoute.Clone();
+}
+
+<h1>Author Catalog</h1>
+
+<table class="table table-bordered table-striped table-sm">
+    <thead class="bg-dark text-white">
+        <tr>
+            <th>
+                @{ routes.SetSortAndDirection(nameof(Author.FirstName), current); }
+                <a asp-action="List" 
+                   asp-all-route-data="@routes.ToDictionary()"
+                   class="text-white">First Name</a>
+            </th>
+            <th>
+                @{ routes.SetSortAndDirection(nameof(Author.LastName), current); }
+                <a asp-action="List" 
+                   asp-all-route-data="@routes.ToDictionary()"
+                   class="text-white">Last Name</a>
+            </th>
+            <th>Book(s)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Author author in Model.Authors)
+        {
+        <tr>
+            <td>
+                <a asp-action="Details" asp-route-id="@author.AuthorId"
+                   asp-route-slug="@author.FullName.Slug()">
+                    @author.FirstName
+                </a>
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@author.AuthorId"
+                   asp-route-slug="@author.FullName.Slug()">
+                    @author.LastName
+                </a>
+            </td>
+            <td>
+                @foreach (var b in author.Books)
+                {
+                    <p>
+                        <a asp-action="Details" asp-controller="Book"
+                           asp-route-id="@b.BookId"
+                           asp-route-slug="@b.Title.Slug()">
+                            @b.Title
+                        </a>
+                    </p>
+                }
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+@* paging links *@
+@{
+    @* Reset to the current route values. This is necessary to clear the changes made while 
+    creating the sorting links above. *@
+    routes = current.Clone();  
+
+    for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        routes.PageNumber = i;
+        string active = @Nav.Active(i, current.PageNumber);
+        <a asp-action="List" asp-all-route-data="@routes.ToDictionary()"
+           class="btn btn-outline-primary @active">@i</a>
+    }
+}

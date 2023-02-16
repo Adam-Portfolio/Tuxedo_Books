@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Genre>
+
+@{
+    ViewData["Title"] = " | Manage Genres";
+}
+
+<h1 class="mb-2">Manage Genres</h1>
+<li class="list-group-item">
+        <h5 class="mt-1"><a asp-action="Add">Add a Genre</a></h5>
+    </li>
+    <li class="list-group-item">
+        <form asp-action="Select" method="post">
+            <div class="row">
+                <h5 class="col-auto mt-1">Select a Genre</h5>
+                <div class="col-auto">
+                    <select name="id" class="form-select" 
+                     asp-items='@new SelectList(Model, "GenreId", "Name")'></select>
+                </div>
+                <div class="col-auto">
+                    <input type="submit" name="Operation" value="Edit"
+                        class="btn btn-primary" />
+                </div>
+                <div class="col-auto">
+                    <input type="submit" name="Operation" value="Delete"
+                        class="btn btn-primary" />
+                </div>
+            </div>
+        </form>
+    </li>

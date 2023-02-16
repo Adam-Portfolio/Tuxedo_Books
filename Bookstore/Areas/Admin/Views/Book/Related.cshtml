@@ -1,0 +1,36 @@
+﻿@model  IEnumerable<Book>
+
+@{
+    ViewData["Title"] = " | Related Books";
+}
+
+<h1 class="mb-2">Related Books</h1>
+
+<table class="table">
+    <tbody>
+        @foreach (var book in Model) {
+        <tr>
+            <td>
+                <a asp-action="Details" asp-controller="Book"
+                   asp-area="" asp-route-id="@book.BookId"
+                   asp-route-slug="@book.Title.Slug()">@book.Title</a>
+            </td>
+            <td>@book.Genre.Name</td>
+            <td>
+                @foreach(var a in book.Authors)
+                {
+                    <div>@a.FullName</div>
+                }
+            </td>
+            <td>
+                <div class="float-end">
+                    <a asp-action="Edit" asp-route-id="@book.BookId"
+                       class="btn btn-primary">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@book.BookId"
+                       class="btn btn-primary">Delete</a>
+                </div>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

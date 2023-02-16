@@ -1,0 +1,47 @@
+﻿@model RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+
+<h2>Register</h2>
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<form method="post" asp-action="Register">
+    <div class="row mb-2">
+        <label class="col-form-label col-md-2">UserName:</label>
+        <div class="col-md-4">
+            <input asp-for="Username" class="form-control" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <label class="col-form-label col-md-2">Password:</label>
+        <div class="col-md-4">
+            <input type="password" asp-for="Password" class="form-control" />
+        </div>
+        <div class="col">
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <label class="col-form-label col-md-2">Confirm Password:</label>
+        <div class="col-md-4">
+            <input type="password" asp-for="ConfirmPassword"
+                   class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col offset-md-2">
+            <button type="submit" class="btn btn-primary">Register</button>
+            <a asp-action="Index" asp-controller="Home" class="btn btn-primary">Cancel</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col offset-md-2">
+            Already registered? <a asp-action="LogIn">Log In</a>
+        </div>
+    </div>
+
+</form>

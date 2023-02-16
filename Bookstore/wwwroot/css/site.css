@@ -1,0 +1,19 @@
+﻿h1 {
+    font-size: 1.75em;
+}
+
+header {
+    padding: 0 1rem;
+    margin-bottom: 2rem;
+    background-color: #eeeeee;
+    border-radius: 0.3rem;
+}
+
+a {
+    text-decoration: none;
+}
+
+.input-validation-error {
+    border: 2px solid #dc3545;  /* same red as text-danger */
+    background-color: #faebd7;  /* antique white */
+}

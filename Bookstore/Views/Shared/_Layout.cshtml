@@ -1,0 +1,124 @@
+﻿	@{
+    // get cart from session
+    var cart = new Cart(Context);
+
+    // use current controller or area to determine if tab is active
+    var current = ViewContext.RouteData.Values["area"]?.ToString() ?? 
+        ViewContext.RouteData.Values["controller"]!.ToString()!;
+
+    // use current action to determine active tab for register and change password tabs
+    var action = ViewContext.RouteData.Values["action"]?.ToString()!;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tuxedo Books @ViewBag.Title</title>
+    <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+          crossorigin="anonymous">
+    <link href="~/css/site.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    @RenderSection("scripts", false)
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark ps-3 pe-3">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
+                    aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menu">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link @Nav.Active("Home", current)" 
+                            asp-action="Index" asp-controller="Home" asp-area="">
+                            <span class="fas fa-home"></span>&nbsp;Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @Nav.Active("Book", current)" 
+                            asp-action="List" asp-controller="Book" asp-area="">
+                            <span class="fas fa-book-open"></span>&nbsp;Books
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @Nav.Active("Author", current)" 
+                            asp-action="List" asp-controller="Author" asp-area="">
+                            <span class="fas fa-feather-alt"></span>&nbsp;Authors
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link @Nav.Active("Cart", current)" 
+                            asp-action="Index" asp-controller="Cart" asp-area="">
+                            <span class="fas fa-shopping-cart"></span>&nbsp;Cart
+                            <span class="badge bg-light text-dark">@cart.Count</span>
+                        </a>
+                    </li>
+                    <!-- These Login buttons and links could be a partial class or a view component -->
+                    @using Microsoft.AspNetCore.Identity
+                    @inject SignInManager<User> signInManager
+                    @if (signInManager.IsSignedIn(User))
+                    {
+                        // signed-in user - Log Out button and username and change password link
+                        <li class="nav-item">
+                            <a class="nav-link @Nav.Active("ChangePassword", action)" 
+                               asp-action="ChangePassword" asp-controller="Account" asp-area="">
+                               <span class="fas fa-edit"></span>&nbsp;Change Password
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <form method="post" asp-action="LogOut" asp-controller="Account"
+                              asp-area="">
+                                <input type="submit" value="Log Out"
+                                   class="btn btn-outline-light" />
+                                <span class="text-light">@User.Identity?.Name</span>
+                            </form>
+                        </li>
+                    }
+                    else
+                    {
+                        // anonymous user - Register link and Log In button
+                        <li class="nav-item">
+                            <a class="nav-link @Nav.Active("Register", action)" 
+                               asp-action="Register" asp-controller="Account" asp-area="">
+                                <span class="fas fa-edit"></span>&nbsp;Register
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Login" asp-controller="Account"
+                            asp-area="" class="btn btn-outline-light">Log In</a>
+                        </li>
+                    }
+                    <li class="nav-item">
+                        <a class="nav-link @Nav.Active("Admin", current)" 
+                            asp-action="Index" asp-controller="Book" asp-area="Admin">
+                            <span class="fas fa-cog"></span>&nbsp;Admin
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <header class="text-center">
+            <a asp-action="Index" asp-controller="Home">
+                <img src="~/images/logo.png" class="img-fluid center-block" />
+            </a>
+        </header>
+        <main>
+            @if (TempData.Keys.Contains("message")) {
+                <h4 class="bg-info text-center text-white p-2">@TempData["message"]</h4>
+            }
+            @RenderBody()
+        </main>
+    </div>
+
+</body>
+</html>
