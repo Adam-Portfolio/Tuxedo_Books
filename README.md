@@ -10,3 +10,7 @@ to display the Package Manager Console.
 project for this app already contains the database migration files, this should create
 the database.
 5. Press Ctrl+F5 to run the app.
+
+## Demo Admin
+admin
+Sesame
